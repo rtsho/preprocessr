@@ -1,0 +1,109 @@
+---
+title: "Introduction to preprocessr"
+author: "Karim Lahrichi"
+date: "2017-09-07"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Introduction to preprocessr}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+The preprocessr package aims to facilitate the preprocessing portion of a machine learning pipeline.
+
+Here is what the package provides:
+
+- a number of typical preprocessing functions (e.g. scale, bin, one_hot_encode, etc.).
+- a declarative interface to use those functions (i.e. minimal programming required).
+- a fit/transform framework, allowing you to save your preprocessing settings based on a training dataset and apply them to any test dataset.
+
+Below is an example of a typical usage of the package.
+
+### Data
+
+We will use an artificial dataset to illustrate usage of the package.
+
+```{r data}
+set.seed(123)
+
+data <- 
+  dplyr::data_frame(
+    ID = 1:100,
+    A = c(rep("a1", 50), rep("a2", 50)),
+    B = sample(c("b1", "b2", NA), 100, replace=TRUE),
+    C = rnorm(100),
+    D = 1,
+    E = sample(c(10,20,30,40,NA), 100, replace=TRUE)
+  )
+
+data
+```
+
+The dataset above contains:
+
+- an ID column (which we typically wouldn't want to include in modeling).
+- two character columns, one of which contains missing values.
+- three numeric columns, one of which is constant, and one of which contains missing values.
+
+
+### Preprocessing
+
+Here is one way we could preprocess this dataset:
+
+```{r preprocess, message=FALSE, warning=FALSE}
+library(dplyr)
+library(preprocessr)
+
+prep <- 
+  preprocess(
+    remove_vars("ID"),
+    remove_constants(),
+    replace_values(numerics, c(NA, 0), median, na.rm=TRUE),
+    replace_values(categoricals, NA, most_frequent),
+    bin("C", 10),
+    encode_one_hot("A"),
+    encode_numeric("B")
+  )
+
+prep$fit_transform(data) %>% as_data_frame
+```
+
+### Transform test data
+
+Typically, you will want to to apply the same preprocessing steps on a test dataset, different from the one you used to fit your preprocessing pipeline.
+
+```{r test}
+test <- 
+  dplyr::data_frame(
+    ID = 1:100,
+    A = c(rep("a1", 50), rep("a2", 50)),
+    B = sample(c("b1", "b2", "b3", NA), 100, replace=TRUE),
+    C = rnorm(100),
+    D = 1,
+    E = sample(c(10,20,30,40,NA), 100, replace=TRUE)
+  )
+
+prep$transform(test) %>% as_data_frame
+```
+
+Looking at the definition of column B in the test set, we see a value ("b3") that was not in the train set, and we don't know what to do with this value when we try to encode it numerically, hence the NAs in the ouput.
+
+To take care of this potential issue, it's a good idea to use the *factorize* function. This function, as the name suggests, turns character variables into factors, and takes care of new levels in the test set (unseen in the train set) by replacing them with the most frequent level seen in the train set.
+
+```{r preprocess2, message=FALSE, warning=FALSE}
+prep <- 
+  preprocess(
+    remove_vars("ID"),
+    remove_constants(),
+    replace_values(numerics, NA, median, na.rm=TRUE),
+    replace_values(categoricals, NA, most_frequent),
+    bin("C", 10),
+    factorize(),
+    encode_one_hot("A"),
+    encode_numeric("B")
+  )
+
+prep$fit(data)
+
+prep$transform(test) %>% as_data_frame
+```
