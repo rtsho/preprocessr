@@ -418,6 +418,66 @@ encode_one_hot <- function(vars = categoricals, sparse = FALSE){
 }
 
 
+
+#### OneHotReverser
+
+OneHotReverser <-
+  R6::R6Class(
+    "OneHotReverser",
+
+    inherit = Preprocessor,
+
+    public = list(
+
+      out = NULL,
+      missing = NULL,
+      keep = NULL,
+
+      initialize = function(vars, out, missing, keep){
+        super$initialize(vars)
+        self$out <- out
+        self$missing <- missing
+        self$keep <- keep
+      },
+
+      fit = function(data){
+        super$fit(data)
+      },
+
+      transform = function(data){
+        sub_data <- data %>% dplyr::select(dplyr::one_of(self$varnames)) %>% as.matrix
+
+        values <- apply(sub_data, 1, function(v) if(all(v == 0)) self$missing else colnames(sub_data)[which(v == 1)])
+
+        if(!self$keep) data <- data %>% dplyr::select(-dplyr::one_of(self$varnames))
+
+        data[[self$out]] = values
+
+        data
+      }
+    )
+  )
+
+#' Take a set of one hot encoded columns (values: 0 or 1) and transform them back into a single factor column.
+#' @param vars Function or formula that returns selected columns from a data.frame. Alternatively, character vector of
+column names.
+#' @param out Name of the new column
+#' @param keep Should the original one hot encoded column be kept
+#' @param missing Value to use for the rows where all the one hot columns are zero.
+#' @importFrom maggritr "%>%"
+#' @examples
+#' df <- data.frame(A=c("a1","a1","a2","a3"), B=c(1, 0, 0, 1), C=c(0, 1, 0, 0))
+#' prep <- reverse_one_hot(vars = c('B', 'C'))
+#' prep$fit(df)
+#' prep$transform(df)
+#' # or more succintly
+#' prep$fit_transform(df)
+#' @export
+reverse_one_hot <- function(vars, out = '.out', missing = 'missing', keep = FALSE){
+  OneHotReverser$new(vars, out, missing, keep)
+}
+
+
 #### NumericEncoder
 
 NumericEncoder <-
