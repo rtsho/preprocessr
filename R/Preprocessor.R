@@ -359,7 +359,6 @@ OneHotEncoder <-
     public = list(
 
       model = NULL,
-      var_names = NULL,
       contrasts = NULL,
       sparse = FALSE,
 
