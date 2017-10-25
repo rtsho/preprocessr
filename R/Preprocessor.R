@@ -419,11 +419,11 @@ encode_one_hot <- function(vars = categoricals, sparse = FALSE){
 
 
 
-#### OneHotReverser
+#### OneHotFuser
 
 OneHotFuser <-
   R6::R6Class(
-    "OneHotReverser",
+    "OneHotFuser",
 
     inherit = Preprocessor,
 
