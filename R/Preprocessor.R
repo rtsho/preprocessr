@@ -421,7 +421,7 @@ encode_one_hot <- function(vars = categoricals, sparse = FALSE){
 
 #### OneHotReverser
 
-OneHotReverser <-
+OneHotFuser <-
   R6::R6Class(
     "OneHotReverser",
 
@@ -451,7 +451,7 @@ OneHotReverser <-
 
         if(!self$keep) data <- data %>% dplyr::select(-dplyr::one_of(self$varnames))
 
-        data[[self$out]] = values
+        data[[self$out]] <- values
 
         data
       }
@@ -466,14 +466,14 @@ OneHotReverser <-
 #' @importFrom maggritr "%>%"
 #' @examples
 #' df <- data.frame(A=c("a1","a1","a2","a3"), B=c(1, 0, 0, 1), C=c(0, 1, 0, 0))
-#' prep <- reverse_one_hot(vars = c('B', 'C'))
+#' prep <- fuse_one_hot(vars = c('B', 'C'))
 #' prep$fit(df)
 #' prep$transform(df)
 #' # or more succintly
 #' prep$fit_transform(df)
 #' @export
-reverse_one_hot <- function(vars, out = '.out', missing = 'missing', keep = FALSE){
-  OneHotReverser$new(vars, out, missing, keep)
+fuse_one_hot <- function(vars, out = '.out', missing = 'missing', keep = FALSE){
+  OneHotFuser$new(vars, out, missing, keep)
 }
 
 
