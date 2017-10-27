@@ -4,9 +4,10 @@ Title: Functions to make your preprocessing life easier.
 Version: 0.1.0
 Author: Karim Lahrichi
 Maintainer: The package maintainer <klahrich@intact.net>
-Description: The goal of this package is to provide a set of functions to make your preprocessing life easier. 
-    Most functions are intended to be used in the fit-transform paradigm (inspired from sklearn): 
-    you fit a preprocessing object to a training dataset, then used the object to transform a test dataset.
+Description: The goal of this package is to provide a set of functions to make
+    your preprocessing life easier. Most functions are intended to be used in the
+    fit-transform paradigm (inspired from sklearn): you fit a preprocessing object
+    to a training dataset, then used the object to transform a test dataset.
 Imports:
     magrittr (>= 1.5),
     dplyr (>= 0.7.1),
@@ -19,5 +20,5 @@ Imports:
 License: ??
 Encoding: UTF-8
 LazyData: true
-RoxygenNote: 6.0.1
+RoxygenNote: 5.0.1
 VignetteBuilder: knitr

@@ -9,3 +9,4 @@ allvars(data)
 \description{
 Helper function to select all variables.
 }
+
