@@ -9,8 +9,7 @@ bin(vars = numerics, breaks = 10)
 \arguments{
 \item{vars}{Function or formula that returns selected columns from a data.frame. Alternatively, character vector of column names.}
 
-\item{breaks}{Either an integer representing the number of bins or a vector of break points.
-Note that if you use the vector version, you should include -Inf and Inf in the vector.}
+\item{breaks}{Either an integer representing the number of bins or a vector of break points.}
 }
 \description{
 Bin numeric columns.
