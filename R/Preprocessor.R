@@ -914,7 +914,7 @@ Binner <-
             self$cuts[[i]][length(self$cuts[[i]])] <- Inf
           }
         }else{
-
+          self$breaks <- c(-Inf, self$breaks, Inf)
           self$cuts <- purrr::rerun(ncol(transformed_data), self$breaks) %>% setNames(colnames(transformed_data))
         }
       },
@@ -939,7 +939,6 @@ Binner <-
 #' Bin numeric columns.
 #' @param vars Function or formula that returns selected columns from a data.frame. Alternatively, character vector of column names.
 #' @param breaks Either an integer representing the number of bins or a vector of break points.
-#' Note that if you use the vector version, you should include -Inf and Inf in the vector.
 #' @importFrom maggritr "%>%"
 #' @examples
 #' df <- data.frame(A=rep("a", 100), B=rnorm(100))
