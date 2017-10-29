@@ -547,6 +547,10 @@ ImpactEncoder <-
       fit = function(data){
         super$fit(data)
 
+        if(is.factor(data[[self$target]])){
+          data[[self$target]] <- as.numeric(as.character(data[[self$target]]))
+        }
+
         subdata <- self$vars(data) %>% dplyr::mutate_all(as.factor)
         vars <- colnames(subdata)
         subdata <- cbind(subdata, data[[self$target]])
@@ -557,7 +561,7 @@ ImpactEncoder <-
 
         formula <- as.formula(paste0(self$target, " ~ ", formula_vars))
 
-        sub_model <- lme4::lmer(formula, data=data)
+        sub_model <- lme4::lmer(formula, data=subdata)
 
         sub_model_coefs <- coef(sub_model)
 
