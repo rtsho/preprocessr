@@ -553,7 +553,7 @@ ImpactEncoder <-
 
         subdata <- self$vars(data) %>% dplyr::mutate_all(as.factor)
         vars <- colnames(subdata)
-        subdata <- cbind(subdata, data[[self$target]])
+        subdata[[self$target]] <- data[[self$target]]
 
         formula_vars <- purrr::rep_along(vars, "(1")
         formula_vars <- paste(formula_vars, paste0(vars, ")"), sep="|")
