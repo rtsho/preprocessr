@@ -547,7 +547,7 @@ ImpactEncoder <-
       fit = function(data){
         super$fit(data)
 
-        data[[self$target]] <- as.numeric(data[[self$target]])
+        if(is.factor(data[[self$target]])) data[[self$target]] <- as.numeric(as.character(data[[self$target]]))
 
         subdata <- self$vars(data) %>% dplyr::mutate_all(as.factor)
         vars <- colnames(subdata)
