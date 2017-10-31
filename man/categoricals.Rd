@@ -15,3 +15,4 @@ prep <- impute(categoricals, most_frequent)
 prep$fit(df)
 prep$transform(df)
 }
+

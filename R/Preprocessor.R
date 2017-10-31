@@ -554,11 +554,13 @@ ImpactEncoder <-
       fit = function(data){
         super$fit(data)
 
-        if(is.factor(data[[self$target]])) data[[self$target]] <- as.numeric(as.character(data[[self$target]]))
+        if(is.factor(data[[self$target]])){
+          data[[self$target]] <- as.numeric(as.character(data[[self$target]]))
+        }
 
         subdata <- self$vars(data) %>% dplyr::mutate_all(as.factor)
         vars <- colnames(subdata)
-        subdata <- cbind(subdata, data[[self$target]])
+        subdata[[self$target]] <- data[[self$target]]
 
         formula_vars <- purrr::rep_along(vars, "(1")
         formula_vars <- paste(formula_vars, paste0(vars, ")"), sep="|")
@@ -566,7 +568,7 @@ ImpactEncoder <-
 
         formula <- as.formula(paste0(self$target, " ~ ", formula_vars))
 
-        sub_model <- lme4::lmer(formula, data=data)
+        sub_model <- lme4::lmer(formula, data=subdata)
 
         sub_model_coefs <- coef(sub_model)
 
@@ -923,7 +925,7 @@ Binner <-
             self$cuts[[i]][length(self$cuts[[i]])] <- Inf
           }
         }else{
-
+          self$breaks <- c(-Inf, self$breaks, Inf)
           self$cuts <- purrr::rerun(ncol(transformed_data), self$breaks) %>% setNames(colnames(transformed_data))
         }
       },
@@ -948,7 +950,6 @@ Binner <-
 #' Bin numeric columns.
 #' @param vars Function or formula that returns selected columns from a data.frame. Alternatively, character vector of column names.
 #' @param breaks Either an integer representing the number of bins or a vector of break points.
-#' Note that if you use the vector version, you should include -Inf and Inf in the vector.
 #' @importFrom maggritr "%>%"
 #' @examples
 #' df <- data.frame(A=rep("a", 100), B=rnorm(100))

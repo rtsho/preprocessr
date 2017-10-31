@@ -2,7 +2,7 @@
 % Please edit documentation in R/Preprocessor.R
 \name{encode_numeric}
 \alias{encode_numeric}
-\title{Create label encoder, that turns factor variables into integers.}
+\title{Create numeric encoder, that turns factor variables into integers.}
 \usage{
 encode_numeric(vars = factors)
 }
@@ -10,7 +10,7 @@ encode_numeric(vars = factors)
 \item{vars}{Function or formula that returns selected columns from a data.frame. Alternatively, character vector of column names.}
 }
 \description{
-Create label encoder, that turns factor variables into integers.
+Create numeric encoder, that turns factor variables into integers.
 }
 \examples{
 df <- data.frame(A=c("a1","a1","a2","a3"), B=c("b1", "b2", "b3", "b4"), X=c(1,2,3,4))
@@ -20,3 +20,4 @@ prep$transform(df)
 # or more succintly
 prep$fit_transform(df)
 }
+

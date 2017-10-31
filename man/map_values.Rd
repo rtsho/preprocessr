@@ -4,7 +4,7 @@
 \alias{map_values}
 \title{Map values of variables.}
 \usage{
-map_values(vars, mapping)
+map_values(vars, mapping, rename)
 }
 \arguments{
 \item{vars}{Function or formula that returns selected columns from a data.frame. Alternatively, character vector of column names.}
@@ -29,3 +29,4 @@ prep$transform(df)
 # or more succintly
 prep$fit_transform(df)
 }
+
