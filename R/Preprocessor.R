@@ -432,12 +432,14 @@ OneHotFuser <-
       out = NULL,
       missing = NULL,
       keep = NULL,
+      as.integer = NULL,
 
-      initialize = function(vars, out, missing, keep){
+      initialize = function(vars, out, missing, as.integer = FALSE, keep = FALSE){
         super$initialize(vars)
         self$out <- out
         self$missing <- missing
         self$keep <- keep
+        self$as.integer <- as.integer
       },
 
       fit = function(data){
@@ -447,11 +449,16 @@ OneHotFuser <-
       transform = function(data){
         sub_data <- data %>% dplyr::select(dplyr::one_of(self$varnames)) %>% as.matrix
 
-        values <- apply(sub_data, 1, function(v) if(all(v == 0)) self$missing else colnames(sub_data)[which(v == 1)])
+        if(!self$as.integer){
+          values <- apply(sub_data, 1, function(v) if(all(v == 0)) self$missing else colnames(sub_data)[which(v == 1)])
+        }
+        else{
+          values <- apply(sub_data, 1, function(v) if(all(v == 0)) self$missing else which(v == 1))
+        }
 
         if(!self$keep) data <- data %>% dplyr::select(-dplyr::one_of(self$varnames))
 
-        data[[self$out]] = values
+        data[[self$out]] <- values
 
         data
       }
@@ -472,7 +479,7 @@ OneHotFuser <-
 #' # or more succintly
 #' prep$fit_transform(df)
 #' @export
-fuse_one_hot <- function(vars, out = '.out', missing = 'missing', keep = FALSE){
+fuse_one_hot <- function(vars, out = '.out', missing = 'missing', as.integer = FALSE, keep = FALSE){
   OneHotFuser$new(vars, out, missing, keep)
 }
 
