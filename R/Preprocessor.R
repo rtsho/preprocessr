@@ -481,7 +481,7 @@ OneHotFuser <-
 #' prep$fit_transform(df)
 #' @export
 fuse_one_hot <- function(vars, out = '.out', missing = 'missing', as.integer = FALSE, keep = FALSE){
-  OneHotFuser$new(vars, out, missing, keep)
+  OneHotFuser$new(vars, out, missing, as.integer, keep)
 }
 
 
