@@ -14,4 +14,3 @@ most_frequent(v, n = 1)
 \description{
 Helper function to find the most frequent values in a variable.
 }
-

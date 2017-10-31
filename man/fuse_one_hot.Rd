@@ -4,7 +4,8 @@
 \alias{fuse_one_hot}
 \title{Take a set of one hot encoded columns (values: 0 or 1) and transform them back into a single factor column.}
 \usage{
-fuse_one_hot(vars, out = ".out", missing = "missing", keep = FALSE)
+fuse_one_hot(vars, out = ".out", missing = "missing", as.integer = FALSE,
+  keep = FALSE)
 }
 \arguments{
 \item{vars}{Function or formula that returns selected columns from a data.frame. Alternatively, character vector of column names.}
@@ -12,6 +13,8 @@ fuse_one_hot(vars, out = ".out", missing = "missing", keep = FALSE)
 \item{out}{Name of the new column}
 
 \item{missing}{Value to use for the rows where all the one hot columns are zero.}
+
+\item{as.integer}{Whether the output should be integer (or character).}
 
 \item{keep}{Should the original one hot encoded column be kept}
 }
@@ -26,4 +29,3 @@ prep$transform(df)
 # or more succintly
 prep$fit_transform(df)
 }
-

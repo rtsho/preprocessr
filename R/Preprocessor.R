@@ -468,8 +468,9 @@ OneHotFuser <-
 #' Take a set of one hot encoded columns (values: 0 or 1) and transform them back into a single factor column.
 #' @param vars Function or formula that returns selected columns from a data.frame. Alternatively, character vector of column names.
 #' @param out Name of the new column
-#' @param keep Should the original one hot encoded column be kept
 #' @param missing Value to use for the rows where all the one hot columns are zero.
+#' @param as.integer Whether the output should be integer (or character).
+#' @param keep Should the original one hot encoded column be kept
 #' @importFrom maggritr "%>%"
 #' @examples
 #' df <- data.frame(A=c("a1","a1","a2","a3"), B=c(1, 0, 0, 1), C=c(0, 1, 0, 0))
